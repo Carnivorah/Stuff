@@ -6,15 +6,17 @@
 using namespace std;
 using namespace cv;
 
-bool gpu = false;
+bool gpu = true;
 Stitcher::Mode mode = Stitcher::PANORAMA;
 vector<Mat> images;
 
-int main(Mat Part1, Mat Part2, Mat Part3)
+int main(int argc, char *argv[])
 {
-	images.push_back(Part1);
-	images.push_back(Part2);
-	images.push_back(Part3);
+	Mat Part;
+	for (int i = 1; i < argc; i++) {
+		Part = imread(argv[i]);
+		images.push_back(Part);
+	}
 	Mat result;
 	Ptr<Stitcher> stitcher = Stitcher::create(mode, gpu);
 	Stitcher::Status status = stitcher->stitch(images, result);
